@@ -4,6 +4,13 @@ import java.util.ArrayList;
 
 import view.UI;
 
+/**
+ * Handles everything related to the client. Reads the input, and sends the
+ * message to the other clients
+ * 
+ * @author Julius Langenberg
+ *
+ */
 public class ClientThread extends Thread {
 
 	private ClientConnection clientConnection = null;
@@ -12,8 +19,7 @@ public class ClientThread extends Thread {
 	private String messagePrefix = null;
 
 	// Construct the thread and receive the connection
-	public ClientThread(ClientConnection clientConnection, 
-						ArrayList<ClientThread> clientThreads, String userName) {
+	public ClientThread(ClientConnection clientConnection, ArrayList<ClientThread> clientThreads, String userName) {
 		this.clientConnection = clientConnection;
 		this.clientThreads = clientThreads;
 		this.userName = userName;
@@ -40,10 +46,18 @@ public class ClientThread extends Thread {
 				break;
 			}
 
+			// Send all clients the sent message
 			for (int i = 0; i < clientThreads.size(); i++) {
 				this.clientThreads.get(i).sendMessage(messagePrefix + request);
 			}
-
+			
+			// Check if the request is something the server can answer to
+			if (util.determineAnswer(request) != "") {
+				// If yes, answer accordingly to all.
+				for (int i = 0; i < clientThreads.size(); i++) {
+					this.clientThreads.get(i).sendMessage("Server: " + util.determineAnswer(request));
+				}
+			}
 			// TODO: remove the object from array list if it is supposed to end
 		}
 

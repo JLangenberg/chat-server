@@ -10,11 +10,11 @@ import view.UI;
 /**
  * The main class that controls the program
  * 
- * @author Julius Langenberg, AH811
+ * @author Julius Langenberg
  * 
  */
 public class ControllerServer {
-	
+
 	ArrayList<ClientThread> clientThreads = new ArrayList<>();
 
 	public static void main(String[] args) {
@@ -22,11 +22,11 @@ public class ControllerServer {
 		// Create a new instance of controller to use its methods.
 		ControllerServer controller = new ControllerServer();
 
-		// Create a data object that stores relevant information
-		Data data = new Data(1234);
-
 		// Create a UI object that gives feedback to the user
 		UI ui = new UI();
+
+		// Create a data object that stores relevant information
+		Data data = new Data(ui.getNumber());
 
 		// Fill the server socket and start the server
 		ServerSocket serverSocket = controller.startServer(data);
@@ -50,20 +50,21 @@ public class ControllerServer {
 	 *                         controller.
 	 */
 	private void getRequestLoop(ServerSocket serverSocket, UI ui, ControllerServer controller) {
-		// Loop until 'clientLimit' connections have been made. That is the artificial limit.
+		// Loop until 'clientLimit' connections have been made. That is the artificial
+		// limit.
 		int clientLimit = 5;
-		String[] userNames = {"Jeff", "Birdman", "Spiderman", "Coolman", "Batman", "Last Man"};
-		
+		String[] userNames = { "Treeman", "Birdman", "Spiderman", "Coolman", "Batman", "Last Man" };
+
 		for (int i = 0; i < clientLimit; i++) {
-			
+
 			// Establish a client connection
 			ClientConnection clientConnection = new ClientConnection(serverSocket);
-			
+
 			// Embed the new connection in a thread
 			clientThreads.add(new ClientThread(clientConnection, clientThreads, userNames[i]));
-			
+
 			// Start the thread to communicate with the client.
-			clientThreads.get(clientThreads.size()-1).start();
+			clientThreads.get(clientThreads.size() - 1).start();
 		}
 	}
 

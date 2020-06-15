@@ -3,7 +3,7 @@ package model;
 /**
  * Stores the port of the server
  * 
- * @author Julius Langenberg, AH811
+ * @author Julius Langenberg
  *
  */
 public class Data {

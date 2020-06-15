@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException;
 /**
  * Class that handles the connection to the client.
  * 
- * @author Julius Langenberg, AH811
+ * @author Julius Langenberg
  *
  */
 public class ClientConnection {
@@ -74,7 +74,7 @@ public class ClientConnection {
 		try {
 			return serverBufferedReader.readLine();
 		} catch (IOException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println("Client disconnected unexpectedly.");
 			this.close();
 			return "ERROR";

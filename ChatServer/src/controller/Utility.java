@@ -7,7 +7,7 @@ import java.util.Date;
  * different, non-class specific classes. It does not store any global
  * variables.
  * 
- * @author Julius Langenberg, AH811
+ * @author Julius Langenberg
  *
  */
 public class Utility {
@@ -37,7 +37,7 @@ public class Utility {
 	 */
 	public String determineAnswer(String request) {
 		// Set a default value
-		String answer = "Answer to " + request;
+		String answer = "";
 
 		// Check for certain sentences and answer if there is a match.
 		switch (request) {
@@ -98,6 +98,12 @@ public class Utility {
 			break;
 		case "List":
 			answer = "TODO";
+			break;
+		case "GitHub?":
+			answer = "https://github.com/JLangenberg";
+			break;
+		case "What did you listen to while developing?":
+			answer = "https://www.youtube.com/watch?v=Tmc2pksB-ao and more";
 			break;
 		}
 		// Return the response

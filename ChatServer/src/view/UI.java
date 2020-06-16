@@ -32,12 +32,13 @@ public class UI {
 	public void successfullConnectionNotification(String userName) {
 		System.out.println("Successfully connected to client " + userName + "!");
 	}
-	
+
 	/**
 	 * Notifies the user that a client has disconnected
+	 * 
 	 * @param userName The name of the disconnecting user
 	 */
-	public void disconnectionNotification(String userName)	{
+	public void disconnectionNotification(String userName) {
 		System.out.println(userName + " disconnected.");
 	}
 

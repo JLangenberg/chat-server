@@ -13,12 +13,22 @@ import view.UI;
  */
 public class ClientThread extends Thread {
 
+	// The clientConnection of this object
 	private ClientConnection clientConnection = null;
+	// All of the connected clients
 	private ArrayList<ClientThread> clientThreads = null;
+	// The userName of this client
 	private String userName = null;
+	// The prefix supposed to be added to all messages that use the prefix
 	private String messagePrefix = null;
 
-	// Construct the thread and receive the connection
+	/**
+	 * Construct the thread and receive the connection
+	 * 
+	 * @param clientConnection This connection
+	 * @param clientThreads    All of the connected clientThreads
+	 * @param userName         The userName of this instance
+	 */
 	public ClientThread(ClientConnection clientConnection, ArrayList<ClientThread> clientThreads, String userName) {
 		this.clientConnection = clientConnection;
 		this.clientThreads = clientThreads;
@@ -34,23 +44,29 @@ public class ClientThread extends Thread {
 		Utility util = new Utility();
 
 		// Inform the user that a client successfully connected.
-		ui.successfullConnectionNotification();
+		ui.successfullConnectionNotification(this.userName);
+
+		// Inform the other clients a client just connected.
+		broadcastMessageNoPrefix(this.userName + " just joined. Say hello!");
 
 		// Loop until the client sends the "bye" request.
 		while (true) {
 
 			// Read all requests
 			String request = this.clientConnection.readInputStream();
+
 			// Check if the connection should be ended. If yes, break and close.
 			if (request.equals("bye") || request.equals("ERROR")) {
+				// Tell all clients a client has disconnected (if possible)
+				broadcastMessageNoPrefix(this.userName + " just disconnected!");
+				// Tell the server user who disconnected
+				ui.disconnectionNotification(this.userName);
 				break;
 			}
 
 			// Send all clients the sent message
-			for (int i = 0; i < clientThreads.size(); i++) {
-				this.clientThreads.get(i).sendMessage(messagePrefix + request);
-			}
-			
+			this.broadcastMessage(request);
+
 			// Check if the request is something the server can answer to
 			if (util.determineAnswer(request) != "") {
 				// If yes, answer accordingly to all.
@@ -66,7 +82,34 @@ public class ClientThread extends Thread {
 		clientConnection.close();
 	}
 
+	/**
+	 * Send a message to the client connected to this thread
+	 * 
+	 * @param message The message to send
+	 */
 	public void sendMessage(String message) {
 		this.clientConnection.writeOutputStream(message);
+	}
+
+	/**
+	 * Broadcast a message to all connected clients. Adds a prefix
+	 * 
+	 * @param request the message to be send
+	 */
+	public void broadcastMessage(String message) {
+		for (int i = 0; i < clientThreads.size(); i++) {
+			this.clientThreads.get(i).sendMessage(messagePrefix + message);
+		}
+	}
+
+	/**
+	 * Broadcast a message to all connected clients, don't add a prefix.
+	 * 
+	 * @param message
+	 */
+	public void broadcastMessageNoPrefix(String message) {
+		for (int i = 0; i < clientThreads.size(); i++) {
+			this.clientThreads.get(i).sendMessage(message);
+		}
 	}
 }

@@ -29,8 +29,16 @@ public class UI {
 	/**
 	 * Notifies the user that there has been a successful connection to the console
 	 */
-	public void successfullConnectionNotification() {
-		System.out.println("Successfully connected to client!");
+	public void successfullConnectionNotification(String userName) {
+		System.out.println("Successfully connected to client " + userName + "!");
+	}
+	
+	/**
+	 * Notifies the user that a client has disconnected
+	 * @param userName The name of the disconnecting user
+	 */
+	public void disconnectionNotification(String userName)	{
+		System.out.println(userName + " disconnected.");
 	}
 
 	// TODO: Could add port specific method and check for conditions (input)

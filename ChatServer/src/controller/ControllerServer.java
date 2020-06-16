@@ -15,6 +15,7 @@ import view.UI;
  */
 public class ControllerServer {
 
+	// The array list that stores all of the clientThreads
 	ArrayList<ClientThread> clientThreads = new ArrayList<>();
 
 	public static void main(String[] args) {
